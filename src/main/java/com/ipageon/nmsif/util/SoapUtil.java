@@ -14,4 +14,5 @@ public class SoapUtil {
         Integer var = Integer.parseInt(value);
         return var;
     }
+	
 }

@@ -3,22 +3,35 @@ package com.ipageon.nmsif.service;
 import com.kt.bcn.adaptor.equip.server.service.as.AlarmEvent;
 import com.kt.bcn.adaptor.equip.server.service.as.ObjectFactory;
 import com.kt.bcn.adaptor.equip.server.service.as.StatusEvent;
+import com.samsung.nms.agent.dataType.AlarmHistoryInfo;
+import com.samsung.nms.agent.dataType.ResObj;
+import com.samsung.nms.agent.dataType.ResultInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ipageon.nmsif.data.AlarmVO;
+import com.ipageon.nmsif.dataFnc.GetAlarmHistory;
+import com.ipageon.nmsif.mapper.AlarmMapper;
 import com.ipageon.nmsif.util.SoapUtil;
 
 import lombok.RequiredArgsConstructor;
 
+import java.rmi.RemoteException;
+import java.util.List;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-@Service
+@Repository
 @RequiredArgsConstructor
 public class EmsServiceImpl implements EmsService {
     private final WebServiceClientService webServiceClientService;
     private ObjectFactory objectFactory = new ObjectFactory();
     private final SoapUtil soapUtil;
     ObjectMapper mapper = new ObjectMapper();
+    
+    @Autowired
+    private final AlarmMapper alarmMapper;
     
     @Override
     public void alarmEvent(String payload) throws Exception {
@@ -52,5 +65,26 @@ public class EmsServiceImpl implements EmsService {
 		sevt.setSystemId(soapUtil.setXmlString(obj.get("systemId").toString()));
 		
 		webServiceClientService.sendStatusEvent(sevt);
+	}
+	
+	@Override
+	public AlarmVO getAlarm() throws Exception {
+		AlarmVO av = alarmMapper.getAlarmInfo();
+		return av;
+	}
+	@Override
+	public ResultInfo getAlarmHistory(GetAlarmHistory payload) throws RemoteException {
+		ResultInfo res = new ResultInfo();
+		ResObj ob = new ResObj();
+		AlarmHistoryInfo history = alarmMapper.getAlarmHistory(payload);
+		ob.setAlarmHistoryInfo(history);
+		if (history != null) {
+			res.setResult("OK");
+		} else {
+			res.setFailReason("no data");
+			res.setResult("NOK");
+		}
+		res.setResObj(ob);
+		return res;
 	}
 }

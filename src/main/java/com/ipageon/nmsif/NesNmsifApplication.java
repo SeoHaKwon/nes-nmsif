@@ -6,7 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.kt.bcn.adaptor.equip.server.service.as", "com.ipageon.nmsif", "com.samsung.nms.agent.dataType"})
+@ComponentScan(basePackages = {	"com.kt.bcn.adaptor.equip.server.service.as",
+								"com.ipageon.nmsif",
+								"com.samsung.nms.agent.dataType"})
 @ConfigurationPropertiesScan
 public class NesNmsifApplication {
 

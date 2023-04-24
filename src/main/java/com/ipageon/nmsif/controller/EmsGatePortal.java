@@ -4,11 +4,14 @@ import org.springframework.stereotype.Component;
 
 import com.ipageon.nmsif.service.EmsService;
 
+import lombok.RequiredArgsConstructor;
+
 @Component
+@RequiredArgsConstructor
 public class EmsGatePortal {
 	
 	@Autowired
-    private EmsService EMSService;
+    private final EmsService EMSService;
 	
 	
 	public void runData(String topic, Object payload) throws Exception {

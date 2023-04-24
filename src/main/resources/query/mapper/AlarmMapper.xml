@@ -8,4 +8,24 @@
 	<select id="getAlarmInfo" resultType="com.ipageon.nmsif.data.AlarmVO">
 		SELECT * FROM FLT_ALARM_INFO_VIEW;
 	</select>
+	
+	<select id="getAlarmHistory" parameterType="com.ipageon.nmsif.dataFnc.GetAlarmHistory" resultType="com.samsung.nms.agent.dataType.AlarmHistoryInfo">
+		SELECT PC AS emsId, INFO AS fileLocation FROM FLT_ALARM_LOG_VIEW
+			WHERE
+			1=1
+		<if test="filterInfo != null">
+			<if test="filterInfo.startTime != null and filterInfo.startTime != ''">
+			AND
+				DATEDIFF(TO_DATE(#{filterInfo.startTime}, 'YYYY-MM-DD HH:MI:SS'), STIME, 'SECOND') <![CDATA[>]]> 0
+			</if>
+			<if test="filterInfo.endTime != null and filterInfo.endTime != ''">
+			AND
+				DATEDIFF(TO_DATE(#{filterInfo.endTime}, 'YYYY-MM-DD HH:MI:SS'), STIME, 'SECOND') <![CDATA[<]]> 0;
+			</if>
+		</if>
+		<if test="emsId != null">
+			AND
+				PC = #{emsId}
+		</if>
+	</select>
 </mapper>
