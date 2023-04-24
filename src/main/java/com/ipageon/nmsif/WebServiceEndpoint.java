@@ -13,18 +13,23 @@ import com.ipageon.nmsif.dataResp.*;
 import com.ipageon.nmsif.service.EmsService;
 import com.samsung.nms.agent.dataType.ResultInfo;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 
 @Endpoint
-@RequiredArgsConstructor
 public class WebServiceEndpoint {
-	
-	@Autowired
+
 	private final EmsService SERVICE;
+//	private final ConfigServiceSoapBindingImpl serve;
 	
-	@Autowired
-	private final ConfigServiceSoapBindingImpl serve;
+    @Autowired
+    public WebServiceEndpoint(EmsService emsService) {
+        this.SERVICE = emsService;
+//        this.serve = serve;
+    }
+    
 	
 	private static final String NAMESPACE_URI = "ConfigService";
 	
